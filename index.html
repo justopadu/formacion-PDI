@@ -21,11 +21,23 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:13px;min-height:100vh;}
 
+/* LOADING */
+#loadingScreen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:9999;}
+#loadingScreen.hidden{display:none;}
+.spinner{width:30px;height:30px;border:3px solid var(--border2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-txt{font-size:13px;color:var(--t2);}
+
 /* HEADER */
 .header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 18px;display:flex;align-items:center;justify-content:space-between;height:48px;position:sticky;top:0;z-index:100;}
 .logo{font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;}
 .hright{display:flex;align-items:center;gap:5px;}
-.save-b{font-size:11px;color:var(--t3);padding:3px 8px;background:var(--s2);border-radius:20px;}
+.save-b{font-size:11px;color:var(--t3);padding:3px 8px;background:var(--s2);border-radius:20px;display:flex;align-items:center;gap:5px;}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--t3);flex-shrink:0;transition:background .3s;}
+.sync-dot.ok{background:var(--green);}
+.sync-dot.err{background:var(--red);}
+.sync-dot.syncing{background:var(--amber);animation:pulse .8s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 
 /* BUTTONS */
 .btn{font-family:'Inter',sans-serif;font-size:12px;padding:4px 10px;border-radius:var(--rsm);border:1px solid var(--border2);background:var(--surface);color:var(--t2);cursor:pointer;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;height:28px;transition:background .1s;}
@@ -57,7 +69,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 /* MAIN */
 .main{padding:14px 18px 40px;}
 
-/* ===== KANBAN ===== */
+/* KANBAN */
 .board{display:flex;gap:12px;align-items:flex-start;overflow-x:auto;padding-bottom:12px;}
 .col{width:270px;flex-shrink:0;}
 .col-header{display:flex;align-items:center;gap:7px;margin-bottom:8px;}
@@ -84,8 +96,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 .dv{font-size:11px;color:var(--t2);}
 .dv.c1{color:var(--blue);font-weight:500;}
 .dv.c2{color:var(--amber);font-weight:500;}
-
-/* TASK display on card */
 .card-tasks{margin-bottom:7px;}
 .next-task{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--blue);background:var(--blue-bg);padding:4px 7px;border-radius:var(--rsm);}
 .task-blocks{display:flex;flex-direction:column;gap:1px;}
@@ -97,28 +107,20 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 .chk.on::after{content:'';width:5px;height:3px;border-left:1.5px solid #fff;border-bottom:1.5px solid #fff;transform:rotate(-45deg) translate(0.5px,-0.5px);display:block;}
 .pend-tasks{display:flex;flex-direction:column;gap:1px;}
 .group-sep{font-size:9px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin:5px 0 2px 3px;}
-
-/* PDF bars */
 .pdf-bars{display:flex;flex-direction:column;gap:3px;margin-bottom:6px;}
 .pdf-row{display:flex;align-items:center;gap:6px;}
 .pdf-label{font-size:10px;font-weight:600;color:var(--t3);width:12px;text-align:right;}
 .pdf-bar{flex:1;height:4px;background:var(--s3);border-radius:3px;overflow:hidden;}
 .pdf-fill{height:100%;border-radius:3px;}
 .pdf-pct{font-size:10px;color:var(--t3);min-width:26px;text-align:right;}
-
-/* Single prog bar */
 .prog-bar{height:3px;background:var(--s3);border-radius:3px;overflow:hidden;margin-bottom:5px;}
 .prog-fill{height:100%;border-radius:3px;}
 .card-footer{display:flex;align-items:center;justify-content:space-between;}
 .prog-pct{font-size:10px;color:var(--t3);}
-.alerts{display:flex;gap:3px;}
-.atag{font-size:10px;font-weight:500;padding:1px 5px;border-radius:3px;}
-.a-cert{background:var(--amber-bg);color:var(--amber);}
-.a-pago{background:var(--red-bg);color:var(--red);}
 .add-btn{width:100%;margin-top:4px;padding:6px 10px;font-family:'Inter',sans-serif;font-size:12px;color:var(--t3);background:none;border:1px dashed var(--border2);border-radius:var(--r);cursor:pointer;text-align:left;}
 .add-btn:hover{background:var(--surface);color:var(--t2);}
 
-/* ===== TABLE VIEW ===== */
+/* TABLE */
 .table-wrap{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:var(--r);overflow:hidden;border:1px solid var(--border);}
 th{padding:9px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--t2);background:var(--s2);border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none;}
@@ -127,16 +129,11 @@ td{padding:8px 12px;border-bottom:1px solid var(--border);font-size:12px;vertica
 tr:last-child td{border-bottom:none;}
 tr:hover td{background:var(--s2);cursor:pointer;}
 .td-name{font-weight:500;display:flex;align-items:center;gap:6px;}
-.td-tasks{display:flex;flex-direction:column;gap:1px;}
-.td-trow{display:flex;align-items:center;gap:5px;font-size:11px;padding:1px 0;}
-.td-trow.done{color:var(--t3);}
-.td-trow.done span{text-decoration:line-through;}
 .sort-arrow{color:var(--t3);font-size:10px;margin-left:3px;}
 
-/* ===== CALENDAR VIEW ===== */
+/* CALENDAR */
 .cal-wrap{overflow-x:auto;}
 .cal-months{display:flex;flex-direction:column;gap:20px;}
-.cal-month{}
 .cal-month-title{font-size:13px;font-weight:600;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
 .cal-day-header{font-size:10px;font-weight:600;color:var(--t3);text-align:center;padding:3px 0;text-transform:uppercase;}
@@ -151,7 +148,7 @@ tr:hover td{background:var(--s2);cursor:pointer;}
 .evt-conv1{background:var(--blue-bg);color:var(--blue-text);}
 .evt-conv2{background:var(--amber-bg);color:var(--amber);}
 
-/* ===== PHASE GROUP VIEW ===== */
+/* FASES */
 .phase-grid{display:flex;flex-direction:column;gap:12px;}
 .phase-group{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
 .phase-header{padding:10px 14px;background:var(--s2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
@@ -163,7 +160,7 @@ tr:hover td{background:var(--s2);cursor:pointer;}
 .mc-name{font-size:12px;font-weight:500;margin-bottom:4px;}
 .mc-meta{font-size:10px;color:var(--t3);display:flex;gap:4px;flex-wrap:wrap;}
 
-/* ===== MODAL ===== */
+/* MODAL */
 .overlay{display:none;position:fixed;inset:0;background:rgba(15,15,15,0.4);z-index:200;align-items:flex-start;justify-content:center;padding:28px 14px;overflow-y:auto;}
 .overlay.open{display:flex;}
 .modal{background:var(--surface);border-radius:var(--r);border:1px solid var(--border2);padding:20px 22px;width:100%;max-width:520px;margin-bottom:28px;box-shadow:0 4px 24px rgba(15,15,15,0.14);}
@@ -195,28 +192,27 @@ tr:hover td{background:var(--s2);cursor:pointer;}
 .ci label{font-size:12px;color:var(--text);cursor:pointer;}
 .ci label.done{text-decoration:line-through;color:var(--t3);}
 .modal-footer{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid var(--border);}
-.notion-info{background:var(--s2);border-radius:var(--rsm);padding:9px 11px;font-size:11px;color:var(--t2);line-height:1.7;margin-bottom:11px;}
-.notion-info strong{color:var(--text);}
-.notion-st{font-size:11px;margin-top:7px;min-height:14px;}
-
-/* card display mode selector */
 .card-mode-group{display:flex;gap:2px;background:var(--s3);padding:2px;border-radius:var(--rsm);}
 .card-mode-btn{font-size:11px;padding:2px 7px;border-radius:2px;border:none;background:transparent;color:var(--t2);cursor:pointer;height:22px;font-family:'Inter',sans-serif;}
 .card-mode-btn.active{background:var(--surface);color:var(--text);font-weight:500;}
-
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--text);color:#fff;font-size:12px;font-weight:500;padding:7px 15px;border-radius:20px;z-index:999;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
 
+<div id="loadingScreen">
+  <div class="spinner"></div>
+  <div class="loading-txt">Conectando con Firebase…</div>
+</div>
+
 <div class="header">
   <div class="logo">📚 Formaciones PDI</div>
   <div class="hright">
-    <span class="save-b" id="saveBadge">Guardado</span>
-    <button class="btn" onclick="exportJSON()">↓ Exportar</button>
-    <label class="btn" style="cursor:pointer;">↑ Importar<input type="file" accept=".json" onchange="importJSON(event)" style="display:none;"></label>
-    <button class="btn" onclick="openNotionModal()">⚙ Notion</button>
+    <div class="save-b">
+      <span class="sync-dot" id="syncDot"></span>
+      <span id="saveBadge">Conectando…</span>
+    </div>
     <button class="btn btn-blue" onclick="openNew()">+ Nueva</button>
   </div>
 </div>
@@ -258,7 +254,7 @@ tr:hover td{background:var(--s2);cursor:pointer;}
 <div class="metrics" id="metrics"></div>
 <div class="main" id="main"></div>
 
-<!-- CARD MODAL -->
+<!-- MODAL -->
 <div class="overlay" id="cardOverlay">
 <div class="modal">
   <div class="modal-title" id="mTitle">Nueva formación</div>
@@ -298,31 +294,7 @@ tr:hover td{background:var(--s2);cursor:pointer;}
     <button class="btn btn-danger" id="btnDel" style="display:none;">Eliminar</button>
     <div style="display:flex;gap:7px;margin-left:auto;">
       <button class="btn" onclick="closeCard()">Cancelar</button>
-      <button class="btn btn-blue" onclick="saveCard()">Guardar</button>
-    </div>
-  </div>
-</div>
-</div>
-
-<!-- NOTION MODAL -->
-<div class="overlay" id="notionOverlay">
-<div class="modal">
-  <div class="modal-title">Conectar con Notion</div>
-  <div class="notion-info">
-    1. Ve a <strong>notion.so/my-integrations</strong> → crea una integration → copia el token.<br>
-    2. Abre tu base de datos → compártela con la integration.<br>
-    3. Copia el ID de la URL (los 32 chars tras el último /).
-  </div>
-  <div class="fg">
-    <div class="ff full"><label>Integration Token</label><input id="notion-token" type="password" placeholder="secret_xxx…"></div>
-    <div class="ff full"><label>Database ID</label><input id="notion-db" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"></div>
-  </div>
-  <div class="notion-st" id="notion-st"></div>
-  <div class="modal-footer">
-    <button class="btn btn-danger" onclick="clearNotion()">Borrar credenciales</button>
-    <div style="display:flex;gap:7px;margin-left:auto;">
-      <button class="btn" onclick="closeNotionModal()">Cancelar</button>
-      <button class="btn btn-blue" onclick="testNotion()">Probar conexión</button>
+      <button class="btn btn-blue" id="btnSave" onclick="saveCard()">Guardar</button>
     </div>
   </div>
 </div>
@@ -330,47 +302,84 @@ tr:hover td{background:var(--s2);cursor:pointer;}
 
 <div class="toast" id="toast"></div>
 
-<script>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import {
+  getFirestore, collection, doc,
+  onSnapshot, addDoc, updateDoc, deleteDoc,
+  query, orderBy, serverTimestamp
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+// ── FIREBASE CONFIG ──────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyByZojr-fOhTApZLZrt7sSu9etgmHEmtMw",
+  authDomain: "formacion-pdi-2026.firebaseapp.com",
+  projectId: "formacion-pdi-2026",
+  storageBucket: "formacion-pdi-2026.firebasestorage.app",
+  messagingSenderId: "105033365155",
+  appId: "1:105033365155:web:9475070b537ffcfaf8b116",
+  measurementId: "G-ECW2FGPSTM"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+const col = collection(db, 'formaciones');
+
+// ── CONSTANTS ────────────────────────────────────────
 const TP=['P1 - Buscar formador','P2 - Cerrar fechas y ECTS','P3 - Ficha descriptiva','P4 - Enviar guía','P5 - Preparar Módulo','P6 - Formulario Inscripción','P7 - Inscribir en grupos aula','P8 - Comunicar Inscripción'];
 const TD=['D1 - Recordatorios sesiones','D2 - Presentar 1ª sesión','D3 - Formulario Satisfacción'];
 const TF=['F1 - Control Asistencia','F2 - Aptos','F3 - Generar certificados D','F4 - Enviar certificados D','F5 - Generar certificados F','F6 - Enviar certificados F','F7 - Subir datos a histórico','F8 - Datos satisfacción','F9 - Pago formador'];
 const AT=[...TP,...TD,...TF];
 const COLS=[{id:'Planificación',dot:'#9b9a97'},{id:'En desarrollo',dot:'#2383e2'},{id:'Finalizado',dot:'#e67e22'},{id:'Cerrado',dot:'#787774'},{id:'Completado',dot:'#0f7b55'}];
 const ICONS=['📋','🎙','🎮','🧠','🤖','🌱','📚','🎓','💡','🔬','🎯','🖥','🎨','🧩','🏆'];
-const SK='fpdi_v5';
 const MONTHS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 const DAYS=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
 const MSHORT=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 
-let data=[],nextId=1,editId=null,conv2en=false,dragId=null;
-let currentView='kanban',cardMode='next';
-let sortCol=null,sortDir=1;
+// ── STATE ────────────────────────────────────────────
+let data=[], editId=null, conv2en=false, dragId=null;
+let currentView='kanban', cardMode='next', sortCol=null, sortDir=1;
 
-function load(){
-  try{const r=localStorage.getItem(SK);if(r){const p=JSON.parse(r);data=p.data||[];nextId=p.nextId||data.length+1;}else{data=defaults();nextId=data.length+1;}}
-  catch{data=defaults();nextId=data.length+1;}
-}
-function save(){
-  localStorage.setItem(SK,JSON.stringify({data,nextId}));
-  document.getElementById('saveBadge').textContent='Guardado '+new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
-}
-function mkT(){return AT.map(t=>({t,done:false}));}
-function defaults(){
-  return[
-    {id:1,nombre:'Podcast',icon:'🎙',eje:'A',itinerario:'A1',formador:'',estado:'Planificación',ects:2,inicio:'2026-03-24',fin:'2026-03-30',conv1:'2026-04-05',conv2:'',tasks:mkT()},
-    {id:2,nombre:'Serious Games',icon:'🎮',eje:'A',itinerario:'A3',formador:'',estado:'En desarrollo',ects:2,inicio:'2026-03-05',fin:'2026-03-23',conv1:'2026-03-31',conv2:'2026-04-24',tasks:AT.map((t,i)=>({t,done:i<8}))},
-    {id:3,nombre:'Inteligencia emocional',icon:'🧠',eje:'A',itinerario:'A2',formador:'Natalia',estado:'Finalizado',ects:2,inicio:'2026-01-23',fin:'2026-02-12',conv1:'2026-03-13',conv2:'2026-04-14',tasks:AT.map((t,i)=>({t,done:i<11}))},
-    {id:4,nombre:'GPT educativo',icon:'🤖',eje:'A',itinerario:'A2',formador:'Natalia',estado:'Cerrado',ects:2,inicio:'2026-01-13',fin:'2026-01-23',conv1:'2026-01-30',conv2:'2026-02-27',tasks:AT.map((t,i)=>({t,done:i<14}))},
-    {id:5,nombre:'Plantilla',icon:'📋',eje:'A',itinerario:'A1',formador:'',estado:'Planificación',ects:0,inicio:'',fin:'',conv1:'',conv2:'',tasks:mkT()},
-  ];
+// ── SYNC UI ──────────────────────────────────────────
+function setSyncStatus(state, msg){
+  document.getElementById('syncDot').className='sync-dot '+state;
+  document.getElementById('saveBadge').textContent=msg;
 }
 
-function pct(tasks){if(!tasks||!tasks.length)return 0;return Math.round(tasks.filter(x=>x.done).length/tasks.length*100);}
-function pctBlock(tasks,prefix){const bl=tasks.filter(t=>t.t.startsWith(prefix));if(!bl.length)return 0;return Math.round(bl.filter(t=>t.done).length/bl.length*100);}
-function barColor(p){if(p===100)return'#0f7b55';if(p>=60)return'#2383e2';if(p>=25)return'#e67e22';return'#d4d4d0';}
-function fmtD(d){if(!d)return'';const[y,m,day]=d.split('-');return`${parseInt(day)} ${MSHORT[parseInt(m)-1]}`;}
-function fmtDLong(d){if(!d)return'';const[y,m,day]=d.split('-');return`${parseInt(day)} ${MSHORT[parseInt(m)-1]} ${y}`;}
+// ── REALTIME LISTENER ────────────────────────────────
+// onSnapshot escucha cambios en tiempo real: todos los usuarios ven
+// los datos actualizados automáticamente sin recargar la página.
+const q = query(col, orderBy('createdAt','asc'));
+onSnapshot(q, snap => {
+  data = snap.docs.map(d => ({ firestoreId: d.id, ...d.data() }));
+  document.getElementById('loadingScreen').classList.add('hidden');
+  setSyncStatus('ok','Sincronizado ✓');
+  render();
+}, err => {
+  console.error(err);
+  document.getElementById('loadingScreen').classList.add('hidden');
+  setSyncStatus('err','Error de conexión');
+  showToast('Error al conectar con Firebase');
+});
 
+// ── HELPERS ──────────────────────────────────────────
+function mkT(){ return AT.map(t=>({t,done:false})); }
+function pct(tasks){ if(!tasks?.length)return 0; return Math.round(tasks.filter(x=>x.done).length/tasks.length*100); }
+function pctBlock(tasks,prefix){ const bl=tasks.filter(t=>t.t.startsWith(prefix)); return bl.length?Math.round(bl.filter(t=>t.done).length/bl.length*100):0; }
+function barColor(p){ return p===100?'#0f7b55':p>=60?'#2383e2':p>=25?'#e67e22':'#d4d4d0'; }
+function fmtD(d){ if(!d)return''; const[,m,day]=d.split('-'); return`${parseInt(day)} ${MSHORT[parseInt(m)-1]}`; }
+function fmtDLong(d){ if(!d)return''; const[y,m,day]=d.split('-'); return`${parseInt(day)} ${MSHORT[parseInt(m)-1]} ${y}`; }
+function autoEstado(tasks,estadoActual){
+  if(!tasks?.length)return estadoActual;
+  const doneP=tasks.filter(t=>t.t.startsWith('P')).every(t=>t.done);
+  const doneD=tasks.filter(t=>t.t.startsWith('D')).every(t=>t.done);
+  const doneF=tasks.filter(t=>t.t.startsWith('F')).every(t=>t.done);
+  if(doneP&&doneD&&doneF)return'Completado';
+  if(doneP&&doneD)return'Finalizado';
+  if(doneP)return'En desarrollo';
+  return estadoActual;
+}
+
+// ── FILTERS ──────────────────────────────────────────
 function filtered(){
   const q=document.getElementById('search').value.toLowerCase();
   const eje=document.getElementById('filtroEje').value;
@@ -382,24 +391,21 @@ function filtered(){
   );
 }
 
+// ── METRICS ──────────────────────────────────────────
 function renderMetrics(){
-  const d=data;
-  const tot=d.length,dev=d.filter(x=>x.estado==='En desarrollo').length;
-  const done=d.filter(x=>['Finalizado','Cerrado','Completado'].includes(x.estado)).length;
+  const tot=data.length, dev=data.filter(x=>x.estado==='En desarrollo').length;
+  const done=data.filter(x=>['Finalizado','Cerrado','Completado'].includes(x.estado)).length;
   document.getElementById('metrics').innerHTML=`
     <div class="metric"><div class="metric-val">${tot}</div><div class="metric-label">Total</div></div>
     <div class="metric"><div class="metric-val" style="color:var(--blue)">${dev}</div><div class="metric-label">En desarrollo</div></div>
-    <div class="metric"><div class="metric-val" style="color:var(--green)">${done}</div><div class="metric-label">Finalizadas</div></div>
-  `;
+    <div class="metric"><div class="metric-val" style="color:var(--green)">${done}</div><div class="metric-label">Finalizadas</div></div>`;
 }
 
+// ── VIEWS ─────────────────────────────────────────────
 function setView(v){
   currentView=v;
-  ['kanban','tabla','calendario','fases'].forEach(x=>{
-    document.getElementById('vb-'+x).classList.toggle('active',x===v);
-  });
-  const cmw=document.getElementById('card-mode-wrap');
-  cmw.style.display=v==='kanban'?'flex':'none';
+  ['kanban','tabla','calendario','fases'].forEach(x=>document.getElementById('vb-'+x).classList.toggle('active',x===v));
+  document.getElementById('card-mode-wrap').style.display=v==='kanban'?'flex':'none';
   render();
 }
 function setCardMode(m){
@@ -407,42 +413,41 @@ function setCardMode(m){
   ['next','pend','all','pdf'].forEach(x=>document.getElementById('cm-'+x).classList.toggle('active',x===m));
   render();
 }
+function render(){
+  renderMetrics();
+  const main=document.getElementById('main');
+  if(currentView==='kanban')renderKanban(main);
+  else if(currentView==='tabla')renderTable(main);
+  else if(currentView==='calendario')renderCalendar(main);
+  else renderFases(main);
+}
 
-function render(){renderMetrics();const main=document.getElementById('main');if(currentView==='kanban')renderKanban(main);else if(currentView==='tabla')renderTable(main);else if(currentView==='calendario')renderCalendar(main);else renderFases(main);}
-
-/* ===== CARD CONTENT ===== */
+// ── CARD TASK DISPLAY ─────────────────────────────────
 function cardTasksHTML(c){
   const tasks=c.tasks||[];
   if(cardMode==='next'){
     const next=tasks.find(t=>!t.done);
-    if(!next)return`<div class="card-tasks"><div class="next-task">✓ Todas las tareas completadas</div></div>`;
-    return`<div class="card-tasks"><div class="next-task">→ ${next.t}</div></div>`;
+    return`<div class="card-tasks"><div class="next-task">${next?'→ '+next.t:'✓ Todas las tareas completadas'}</div></div>`;
   }
   if(cardMode==='pend'){
     const pend=tasks.filter(t=>!t.done);
     if(!pend.length)return`<div class="card-tasks"><div class="next-task">✓ Sin tareas pendientes</div></div>`;
-    const groups=[{l:'P',label:'Plan.'},{l:'D',label:'Des.'},{l:'F',label:'Fin.'}];
     let html='<div class="card-tasks"><div class="pend-tasks">';
-    groups.forEach(g=>{
-      const items=pend.filter(t=>t.t.startsWith(g.l));
-      if(!items.length)return;
+    [{l:'P',label:'Plan.'},{l:'D',label:'Des.'},{l:'F',label:'Fin.'}].forEach(g=>{
+      const items=pend.filter(t=>t.t.startsWith(g.l)); if(!items.length)return;
       html+=`<div class="group-sep">${g.label}</div>`;
       items.forEach(t=>{html+=`<div class="t-row"><div class="chk"></div><span class="t-txt">${t.t}</span></div>`;});
     });
-    html+='</div></div>';
-    return html;
+    return html+'</div></div>';
   }
   if(cardMode==='all'){
-    const groups=[{l:'P',label:'Planificación'},{l:'D',label:'Desarrollo'},{l:'F',label:'Finalización'}];
     let html='<div class="card-tasks"><div class="task-blocks">';
-    groups.forEach(g=>{
-      const items=tasks.filter(t=>t.t.startsWith(g.l));
-      if(!items.length)return;
+    [{l:'P',label:'Planificación'},{l:'D',label:'Desarrollo'},{l:'F',label:'Finalización'}].forEach(g=>{
+      const items=tasks.filter(t=>t.t.startsWith(g.l)); if(!items.length)return;
       html+=`<div class="group-sep">${g.label}</div>`;
       items.forEach(t=>{html+=`<div class="t-row ${t.done?'done':''}"><div class="chk ${t.done?'on':''}"></div><span class="t-txt">${t.t}</span></div>`;});
     });
-    html+='</div></div>';
-    return html;
+    return html+'</div></div>';
   }
   if(cardMode==='pdf'){
     const pp=pctBlock(tasks,'P'),pd=pctBlock(tasks,'D'),pf=pctBlock(tasks,'F');
@@ -455,6 +460,7 @@ function cardTasksHTML(c){
   return'';
 }
 
+// ── BUILD CARD ────────────────────────────────────────
 function buildCard(c){
   const p=pct(c.tasks||[]);
   let tags=`<span class="tag tag-${c.eje}">${c.itinerario||c.eje}</span>`;
@@ -464,7 +470,8 @@ function buildCard(c){
   if(c.conv1)dates+=`<span class="dlbl">Conv.1</span><span class="dv c1">${fmtD(c.conv1)}</span>`;
   if(c.conv2)dates+=`<span class="dlbl">Conv.2</span><span class="dv c2">${fmtD(c.conv2)}</span>`;
   if(c.formador)dates+=`<span class="dlbl">Form.</span><span class="dv">${c.formador}</span>`;
-  const div=document.createElement('div');div.className='card';div.draggable=true;
+  const div=document.createElement('div');
+  div.className='card'; div.draggable=true;
   div.innerHTML=`
     <div class="card-top"><span class="card-icon">${c.icon||'📋'}</span><span class="card-name">${c.nombre}</span></div>
     <div class="card-tags">${tags}</div>
@@ -472,195 +479,178 @@ function buildCard(c){
     ${cardTasksHTML(c)}
     <div class="prog-bar"><div class="prog-fill" style="width:${p}%;background:${barColor(p)}"></div></div>
     <div class="card-footer"><span class="prog-pct">${p}% completado</span></div>`;
-  div.addEventListener('dragstart',()=>{dragId=c.id;div.classList.add('dragging');});
-  div.addEventListener('dragend',()=>{dragId=null;div.classList.remove('dragging');});
-  div.addEventListener('click',()=>openEdit(c.id));
+  div.addEventListener('dragstart',()=>{dragId=c.firestoreId; div.classList.add('dragging');});
+  div.addEventListener('dragend',()=>{dragId=null; div.classList.remove('dragging');});
+  div.addEventListener('click',()=>openEdit(c.firestoreId));
   return div;
 }
 
-/* ===== KANBAN ===== */
+// ── KANBAN ────────────────────────────────────────────
 function renderKanban(main){
   main.innerHTML='';
-  const board=document.createElement('div');board.className='board';
+  const board=document.createElement('div'); board.className='board';
   const filt=filtered();
   COLS.forEach(col=>{
     const cards=filt.filter(c=>c.estado===col.id);
-    const colEl=document.createElement('div');colEl.className='col';
+    const colEl=document.createElement('div'); colEl.className='col';
     colEl.innerHTML=`<div class="col-header"><div class="col-dot" style="background:${col.dot}"></div><span class="col-title">${col.id}</span><span class="col-count">${cards.length}</span></div>`;
-    const list=document.createElement('div');list.className='cards-list';list.dataset.col=col.id;
-    list.addEventListener('dragover',e=>{e.preventDefault();list.classList.add('drag-over');});
+    const list=document.createElement('div'); list.className='cards-list'; list.dataset.col=col.id;
+    list.addEventListener('dragover',e=>{e.preventDefault(); list.classList.add('drag-over');});
     list.addEventListener('dragleave',()=>list.classList.remove('drag-over'));
-    list.addEventListener('drop',e=>{e.preventDefault();list.classList.remove('drag-over');if(dragId!==null){const i=data.findIndex(d=>d.id===dragId);if(i>=0){data[i].estado=col.id;save();render();showToast('Movido a "'+col.id+'"');}}});
+    list.addEventListener('drop',async e=>{
+      e.preventDefault(); list.classList.remove('drag-over');
+      if(dragId){
+        setSyncStatus('syncing','Guardando…');
+        try{ await updateDoc(doc(db,'formaciones',dragId),{estado:col.id}); showToast('Movido a "'+col.id+'"'); }
+        catch(err){ setSyncStatus('err','Error'); showToast('Error al mover'); }
+      }
+    });
     cards.forEach(c=>list.appendChild(buildCard(c)));
-    const ab=document.createElement('button');ab.className='add-btn';ab.textContent='+ Nueva formación';ab.onclick=()=>openNew(col.id);
-    colEl.appendChild(list);colEl.appendChild(ab);board.appendChild(colEl);
+    const ab=document.createElement('button'); ab.className='add-btn'; ab.textContent='+ Nueva formación'; ab.onclick=()=>openNew(col.id);
+    colEl.appendChild(list); colEl.appendChild(ab); board.appendChild(colEl);
   });
   main.appendChild(board);
 }
 
-/* ===== TABLE ===== */
+// ── TABLE ─────────────────────────────────────────────
 function renderTable(main){
   main.innerHTML='';
-  const wrap=document.createElement('div');wrap.className='table-wrap';
+  const wrap=document.createElement('div'); wrap.className='table-wrap';
   let rows=filtered();
   if(sortCol){
     rows=[...rows].sort((a,b)=>{
-      let va=a[sortCol]||'',vb=b[sortCol]||'';
-      if(sortCol==='pct'){va=pct(a.tasks||[]);vb=pct(b.tasks||[]);return(va-vb)*sortDir;}
-      return String(va).localeCompare(String(vb))*sortDir;
+      if(sortCol==='pct')return(pct(a.tasks||[])-pct(b.tasks||[]))*sortDir;
+      return String(a[sortCol]||'').localeCompare(String(b[sortCol]||''))*sortDir;
     });
   }
   const cols2=[
-    {key:'nombre',label:'Nombre'},
-    {key:'estado',label:'Estado'},
-    {key:'itinerario',label:'Itinerario'},
-    {key:'formador',label:'Formador/a'},
-    {key:'inicio',label:'Inicio'},
-    {key:'fin',label:'Fin'},
-    {key:'conv1',label:'Conv. 1'},
-    {key:'conv2',label:'Conv. 2'},
-    {key:'ects',label:'ECTS'},
-    {key:'pct',label:'% Completado'},
-    {key:'tasks',label:'Tareas pendientes'},
+    {key:'nombre',label:'Nombre'},{key:'estado',label:'Estado'},{key:'itinerario',label:'Itinerario'},
+    {key:'formador',label:'Formador/a'},{key:'inicio',label:'Inicio'},{key:'fin',label:'Fin'},
+    {key:'conv1',label:'Conv. 1'},{key:'conv2',label:'Conv. 2'},{key:'ects',label:'ECTS'},
+    {key:'pct',label:'% Completado'},{key:'tasks',label:'Tareas pendientes'},
   ];
   const table=document.createElement('table');
-  const thead=document.createElement('thead');
   const hrow=document.createElement('tr');
   cols2.forEach(col=>{
     const th=document.createElement('th');
-    const arrow=sortCol===col.key?(sortDir===1?' ↑':' ↓'):'';
-    th.innerHTML=col.label+`<span class="sort-arrow">${arrow}</span>`;
-    if(col.key!=='tasks')th.onclick=()=>{if(sortCol===col.key)sortDir*=-1;else{sortCol=col.key;sortDir=1;}renderTable(main);};
+    th.innerHTML=col.label+`<span class="sort-arrow">${sortCol===col.key?(sortDir===1?' ↑':' ↓'):''}</span>`;
+    if(col.key!=='tasks')th.onclick=()=>{sortCol===col.key?sortDir*=-1:(sortCol=col.key,sortDir=1); renderTable(main);};
     hrow.appendChild(th);
   });
-  thead.appendChild(hrow);table.appendChild(thead);
+  const thead=document.createElement('thead'); thead.appendChild(hrow); table.appendChild(thead);
   const tbody=document.createElement('tbody');
   rows.forEach(c=>{
-    const tr=document.createElement('tr');
-    tr.addEventListener('click',()=>openEdit(c.id));
+    const tr=document.createElement('tr'); tr.onclick=()=>openEdit(c.firestoreId);
     const p=pct(c.tasks||[]);
-    const pendTasks=(c.tasks||[]).filter(t=>!t.done);
-    const stateColor={Planificación:'var(--t3)','En desarrollo':'var(--blue)',Finalizado:'var(--amber)',Cerrado:'var(--t2)',Completado:'var(--green)'}[c.estado]||'var(--t2)';
-    const cells=[
+    const pend=(c.tasks||[]).filter(t=>!t.done);
+    const sc={Planificación:'var(--t3)','En desarrollo':'var(--blue)',Finalizado:'var(--amber)',Cerrado:'var(--t2)',Completado:'var(--green)'}[c.estado]||'var(--t2)';
+    [
       `<div class="td-name"><span>${c.icon||'📋'}</span>${c.nombre}</div>`,
-      `<span style="color:${stateColor};font-weight:500">${c.estado}</span>`,
+      `<span style="color:${sc};font-weight:500">${c.estado}</span>`,
       `<span class="tag tag-${c.eje}" style="display:inline-block">${c.itinerario||c.eje}</span>`,
-      c.formador||'—',
-      fmtDLong(c.inicio)||'—',
-      fmtDLong(c.fin)||'—',
+      c.formador||'—', fmtDLong(c.inicio)||'—', fmtDLong(c.fin)||'—',
       c.conv1?`<span style="color:var(--blue);font-weight:500">${fmtDLong(c.conv1)}</span>`:'—',
       c.conv2?`<span style="color:var(--amber);font-weight:500">${fmtDLong(c.conv2)}</span>`:'—',
       c.ects||'—',
       `<div style="display:flex;align-items:center;gap:6px"><div style="width:60px;height:4px;background:var(--s3);border-radius:3px;overflow:hidden"><div style="width:${p}%;height:100%;background:${barColor(p)};border-radius:3px"></div></div><span style="font-size:11px;color:var(--t3)">${p}%</span></div>`,
-      `<div class="td-tasks">${pendTasks.slice(0,3).map(t=>`<div class="td-trow"><div class="chk" style="width:10px;height:10px;border-radius:2px;border:1.5px solid var(--border2);flex-shrink:0"></div><span>${t.t}</span></div>`).join('')}${pendTasks.length>3?`<div style="font-size:10px;color:var(--t3)">+${pendTasks.length-3} más</div>`:''}</div>`,
-    ];
-    cells.forEach(html=>{const td=document.createElement('td');td.innerHTML=html;tr.appendChild(td);});
+      `<div>${pend.slice(0,3).map(t=>`<div style="display:flex;align-items:center;gap:5px;font-size:11px;padding:1px 0"><div style="width:10px;height:10px;border-radius:2px;border:1.5px solid var(--border2);flex-shrink:0"></div><span>${t.t}</span></div>`).join('')}${pend.length>3?`<div style="font-size:10px;color:var(--t3)">+${pend.length-3} más</div>`:''}</div>`,
+    ].forEach(html=>{const td=document.createElement('td'); td.innerHTML=html; tr.appendChild(td);});
     tbody.appendChild(tr);
   });
-  table.appendChild(tbody);wrap.appendChild(table);main.appendChild(wrap);
+  table.appendChild(tbody); wrap.appendChild(table); main.appendChild(wrap);
 }
 
-/* ===== CALENDAR ===== */
+// ── CALENDAR ──────────────────────────────────────────
 function renderCalendar(main){
   main.innerHTML='';
-  const wrap=document.createElement('div');wrap.className='cal-wrap';
-  const filt=filtered();
-  const today=new Date();
+  const filt=filtered(), today=new Date();
   const allDates=[];
-  filt.forEach(c=>{
-    ['inicio','fin','conv1','conv2'].forEach(k=>{if(c[k])allDates.push(new Date(c[k]));});
-  });
+  filt.forEach(c=>['inicio','fin','conv1','conv2'].forEach(k=>{if(c[k])allDates.push(new Date(c[k]));}));
   allDates.push(today);
-  const minDate=new Date(Math.min(...allDates.map(d=>d.getTime())));
-  const maxDate=new Date(Math.max(...allDates.map(d=>d.getTime())));
-  minDate.setDate(1);maxDate.setMonth(maxDate.getMonth()+1);maxDate.setDate(1);
-  const months=[];
-  let cur=new Date(minDate);
-  while(cur<maxDate){months.push(new Date(cur));cur.setMonth(cur.getMonth()+1);}
-  const calDiv=document.createElement('div');calDiv.className='cal-months';
+  const minD=new Date(Math.min(...allDates.map(d=>d.getTime())));
+  const maxD=new Date(Math.max(...allDates.map(d=>d.getTime())));
+  minD.setDate(1); maxD.setMonth(maxD.getMonth()+1); maxD.setDate(1);
+  const months=[]; let cur=new Date(minD);
+  while(cur<maxD){months.push(new Date(cur)); cur.setMonth(cur.getMonth()+1);}
+  const calDiv=document.createElement('div'); calDiv.className='cal-months';
   months.forEach(month=>{
-    const mDiv=document.createElement('div');mDiv.className='cal-month';
+    const mDiv=document.createElement('div'); mDiv.className='cal-month';
     mDiv.innerHTML=`<div class="cal-month-title">${MONTHS[month.getMonth()]} ${month.getFullYear()}</div>`;
-    const grid=document.createElement('div');grid.className='cal-grid';
-    DAYS.forEach(d=>{const dh=document.createElement('div');dh.className='cal-day-header';dh.textContent=d;grid.appendChild(dh);});
+    const grid=document.createElement('div'); grid.className='cal-grid';
+    DAYS.forEach(d=>{const dh=document.createElement('div'); dh.className='cal-day-header'; dh.textContent=d; grid.appendChild(dh);});
     const firstDay=(month.getDay()+6)%7;
-    for(let i=0;i<firstDay;i++){const empty=document.createElement('div');empty.className='cal-day empty';grid.appendChild(empty);}
-    const daysInMonth=new Date(month.getFullYear(),month.getMonth()+1,0).getDate();
-    for(let d=1;d<=daysInMonth;d++){
-      const dayEl=document.createElement('div');dayEl.className='cal-day';
-      const isToday=today.getDate()===d&&today.getMonth()===month.getMonth()&&today.getFullYear()===month.getFullYear();
-      if(isToday)dayEl.classList.add('today');
-      const dayNum=document.createElement('div');dayNum.className='cal-day-num';dayNum.textContent=d;
-      dayEl.appendChild(dayNum);
-      const dateStr=`${month.getFullYear()}-${String(month.getMonth()+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    for(let i=0;i<firstDay;i++){const e=document.createElement('div'); e.className='cal-day empty'; grid.appendChild(e);}
+    const dim=new Date(month.getFullYear(),month.getMonth()+1,0).getDate();
+    for(let d=1;d<=dim;d++){
+      const dayEl=document.createElement('div'); dayEl.className='cal-day';
+      if(today.getDate()===d&&today.getMonth()===month.getMonth()&&today.getFullYear()===month.getFullYear())dayEl.classList.add('today');
+      const dn=document.createElement('div'); dn.className='cal-day-num'; dn.textContent=d; dayEl.appendChild(dn);
+      const ds=`${month.getFullYear()}-${String(month.getMonth()+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
       filt.forEach(c=>{
-        if(c.inicio===dateStr){const e=document.createElement('div');e.className='cal-evt evt-inicio';e.textContent='▶ '+c.nombre;e.title=c.nombre+' — Inicio';e.onclick=(ev)=>{ev.stopPropagation();openEdit(c.id);};dayEl.appendChild(e);}
-        if(c.fin===dateStr){const e=document.createElement('div');e.className='cal-evt evt-fin';e.textContent='■ '+c.nombre;e.title=c.nombre+' — Fin';e.onclick=(ev)=>{ev.stopPropagation();openEdit(c.id);};dayEl.appendChild(e);}
-        if(c.conv1===dateStr){const e=document.createElement('div');e.className='cal-evt evt-conv1';e.textContent='C1 '+c.nombre;e.title=c.nombre+' — Entrega 1ª conv.';e.onclick=(ev)=>{ev.stopPropagation();openEdit(c.id);};dayEl.appendChild(e);}
-        if(c.conv2===dateStr){const e=document.createElement('div');e.className='cal-evt evt-conv2';e.textContent='C2 '+c.nombre;e.title=c.nombre+' — Entrega 2ª conv.';e.onclick=(ev)=>{ev.stopPropagation();openEdit(c.id);};dayEl.appendChild(e);}
+        const evts=[[c.inicio,'evt-inicio','▶'],[c.fin,'evt-fin','■'],[c.conv1,'evt-conv1','C1'],[c.conv2,'evt-conv2','C2']];
+        evts.forEach(([date,cls,prefix])=>{
+          if(date===ds){const e=document.createElement('div'); e.className='cal-evt '+cls; e.textContent=prefix+' '+c.nombre; e.onclick=ev=>{ev.stopPropagation(); openEdit(c.firestoreId);}; dayEl.appendChild(e);}
+        });
       });
       grid.appendChild(dayEl);
     }
     mDiv.appendChild(grid);
-    // legend
-    mDiv.insertAdjacentHTML('beforeend','<div style="display:flex;gap:10px;margin-top:7px;flex-wrap:wrap"><span class="cal-evt evt-inicio" style="font-size:10px">▶ Inicio sesiones</span><span class="cal-evt evt-fin" style="font-size:10px">■ Fin sesiones</span><span class="cal-evt evt-conv1" style="font-size:10px">C1 Entrega 1ª conv.</span><span class="cal-evt evt-conv2" style="font-size:10px">C2 Entrega 2ª conv.</span></div>');
+    mDiv.insertAdjacentHTML('beforeend','<div style="display:flex;gap:10px;margin-top:7px;flex-wrap:wrap"><span class="cal-evt evt-inicio" style="font-size:10px">▶ Inicio</span><span class="cal-evt evt-fin" style="font-size:10px">■ Fin</span><span class="cal-evt evt-conv1" style="font-size:10px">C1 1ª conv.</span><span class="cal-evt evt-conv2" style="font-size:10px">C2 2ª conv.</span></div>');
     calDiv.appendChild(mDiv);
   });
-  wrap.appendChild(calDiv);main.appendChild(wrap);
+  main.appendChild(calDiv);
 }
 
-/* ===== PHASES ===== */
+// ── FASES ─────────────────────────────────────────────
 function renderFases(main){
   main.innerHTML='';
   const filt=filtered();
-  const grid=document.createElement('div');grid.className='phase-grid';
+  const grid=document.createElement('div'); grid.className='phase-grid';
   AT.forEach(task=>{
-    const inTask=filt.filter(c=>{
-      const t=c.tasks&&c.tasks.find(x=>x.t===task);
-      return t&&!t.done;
-    });
+    const inTask=filt.filter(c=>{const t=c.tasks?.find(x=>x.t===task); return t&&!t.done;});
     if(!inTask.length)return;
-    const grp=document.createElement('div');grp.className='phase-group';
+    const grp=document.createElement('div'); grp.className='phase-group';
     grp.innerHTML=`<div class="phase-header"><span class="phase-title">${task}</span><span class="phase-count">${inTask.length}</span></div>`;
-    const cards=document.createElement('div');cards.className='phase-cards';
+    const cards=document.createElement('div'); cards.className='phase-cards';
     inTask.forEach(c=>{
       const p=pct(c.tasks||[]);
-      const mc=document.createElement('div');mc.className='mini-card';
+      const mc=document.createElement('div'); mc.className='mini-card';
       mc.innerHTML=`<div class="mc-name">${c.icon||'📋'} ${c.nombre}</div><div class="mc-meta"><span class="tag tag-${c.eje}" style="font-size:10px">${c.itinerario||c.eje}</span><span style="color:${barColor(p)};font-size:10px">${p}%</span>${c.formador?`<span>${c.formador}</span>`:''}</div>`;
-      mc.onclick=()=>openEdit(c.id);
+      mc.onclick=()=>openEdit(c.firestoreId);
       cards.appendChild(mc);
     });
-    grp.appendChild(cards);grid.appendChild(grp);
+    grp.appendChild(cards); grid.appendChild(grp);
   });
   if(!grid.childNodes.length)grid.innerHTML='<p style="color:var(--t3);font-size:13px;padding:20px 0">No hay tareas pendientes con los filtros actuales.</p>';
   main.appendChild(grid);
 }
 
-/* ===== MODAL ===== */
+// ── MODAL ─────────────────────────────────────────────
 function buildCL(tasks){
-  const el=document.getElementById('checklist-modal');el.innerHTML='';
+  const el=document.getElementById('checklist-modal'); el.innerHTML='';
   [{label:'Planificación',p:'P'},{label:'Desarrollo',p:'D'},{label:'Finalización',p:'F'}].forEach(g=>{
-    const items=tasks.filter(t=>t.t.startsWith(g.p));if(!items.length)return;
-    const gl=document.createElement('div');gl.className='grp-lbl';gl.textContent=g.label;el.appendChild(gl);
+    const items=tasks.filter(t=>t.t.startsWith(g.p)); if(!items.length)return;
+    const gl=document.createElement('div'); gl.className='grp-lbl'; gl.textContent=g.label; el.appendChild(gl);
     items.forEach(item=>{
-      const div=document.createElement('div');div.className='ci';
-      const cb=document.createElement('input');cb.type='checkbox';cb.checked=item.done;
-      const uid='cl-'+item.t.replace(/\W+/g,'_');cb.id=uid;
-      cb.onchange=()=>{item.done=cb.checked;lbl.className=cb.checked?'done':'';};
-      const lbl=document.createElement('label');lbl.htmlFor=uid;lbl.textContent=item.t;
+      const div=document.createElement('div'); div.className='ci';
+      const cb=document.createElement('input'); cb.type='checkbox'; cb.checked=item.done;
+      const uid='cl-'+item.t.replace(/\W+/g,'_'); cb.id=uid;
+      const lbl=document.createElement('label'); lbl.htmlFor=uid; lbl.textContent=item.t;
       if(item.done)lbl.className='done';
-      div.appendChild(cb);div.appendChild(lbl);el.appendChild(div);
+      cb.onchange=()=>{item.done=cb.checked; lbl.className=cb.checked?'done':'';};
+      div.appendChild(cb); div.appendChild(lbl); el.appendChild(div);
     });
   });
 }
 function setConv2(en){
   conv2en=en;
-  const inp=document.getElementById('f-conv2'),tog=document.getElementById('conv2tog');
-  inp.disabled=!en;inp.style.opacity=en?'1':'0.4';inp.style.cursor=en?'':'not-allowed';
-  tog.textContent=en?'－':'＋';tog.style.color=en?'var(--amber)':'var(--t3)';
+  const inp=document.getElementById('f-conv2'), tog=document.getElementById('conv2tog');
+  inp.disabled=!en; inp.style.opacity=en?'1':'0.4'; inp.style.cursor=en?'':'not-allowed';
+  tog.textContent=en?'－':'＋'; tog.style.color=en?'var(--amber)':'var(--t3)';
   if(!en)inp.value='';
 }
-function toggleConv2(){setConv2(!conv2en);}
+function toggleConv2(){ setConv2(!conv2en); }
+
 function openNew(estado){
   editId=null;
   document.getElementById('mTitle').textContent='Nueva formación';
@@ -669,12 +659,12 @@ function openNew(estado){
   document.getElementById('f-eje').value='A';
   document.getElementById('f-estado').value=estado||'Planificación';
   ['f-inicio','f-fin','f-conv1','f-conv2'].forEach(f=>document.getElementById(f).value='');
-  buildCL(mkT());setConv2(false);
+  buildCL(mkT()); setConv2(false);
   document.getElementById('cardOverlay').classList.add('open');
 }
-function openEdit(id){
-  const c=data.find(x=>x.id===id);if(!c)return;
-  editId=id;
+function openEdit(firestoreId){
+  const c=data.find(x=>x.firestoreId===firestoreId); if(!c)return;
+  editId=firestoreId;
   document.getElementById('mTitle').textContent=c.nombre;
   document.getElementById('btnDel').style.display='block';
   document.getElementById('f-nombre').value=c.nombre;
@@ -687,78 +677,72 @@ function openEdit(id){
   document.getElementById('f-fin').value=c.fin||'';
   document.getElementById('f-conv1').value=c.conv1||'';
   document.getElementById('f-conv2').value=c.conv2||'';
-  buildCL(c.tasks||mkT());
-  setConv2(!!(c.conv2));
+  buildCL(c.tasks||mkT()); setConv2(!!(c.conv2));
   document.getElementById('cardOverlay').classList.add('open');
 }
 function getT(){
   const el=document.getElementById('checklist-modal');
-  return AT.map(t=>{const cb=el.querySelector('#cl-'+t.replace(/\W+/g,'_'));return{t,done:cb?cb.checked:false};});
-}
-function autoEstado(tasks, estadoActual) {
-  if(!tasks||!tasks.length) return estadoActual;
-  const allP = tasks.filter(t=>t.t.startsWith('P'));
-  const allD = tasks.filter(t=>t.t.startsWith('D'));
-  const allF = tasks.filter(t=>t.t.startsWith('F'));
-  const doneP = allP.every(t=>t.done);
-  const doneD = allD.every(t=>t.done);
-  const doneF = allF.every(t=>t.done);
-  if(doneP && doneD && doneF) return 'Completado';
-  if(doneP && doneD) return 'Finalizado';
-  if(doneP) return 'En desarrollo';
-  return estadoActual;
+  return AT.map(t=>{const cb=el.querySelector('#cl-'+t.replace(/\W+/g,'_')); return{t,done:cb?cb.checked:false};});
 }
 
-function saveCard(){
+async function saveCard(){
   const nombre=document.getElementById('f-nombre').value.trim();
-  if(!nombre){alert('El nombre es obligatorio.');return;}
+  if(!nombre){alert('El nombre es obligatorio.'); return;}
   const tasks=getT();
   const estadoManual=document.getElementById('f-estado').value;
-  const estadoAuto=autoEstado(tasks, estadoManual);
+  const estadoAuto=autoEstado(tasks,estadoManual);
   const ORDEN=['Planificación','En desarrollo','Finalizado','Completado'];
   const estadoFinal=ORDEN.indexOf(estadoAuto)>ORDEN.indexOf(estadoManual)?estadoAuto:estadoManual;
-  const rec={nombre,eje:document.getElementById('f-eje').value,itinerario:document.getElementById('f-itinerario').value,formador:document.getElementById('f-formador').value,estado:estadoFinal,ects:parseFloat(document.getElementById('f-ects').value)||0,inicio:document.getElementById('f-inicio').value,fin:document.getElementById('f-fin').value,conv1:document.getElementById('f-conv1').value,conv2:conv2en?document.getElementById('f-conv2').value:'',tasks};
-  if(estadoFinal!==estadoManual) showToast('Estado actualizado a "'+estadoFinal+'" automáticamente');
-  if(editId){const i=data.findIndex(x=>x.id===editId);rec.icon=data[i].icon||'📋';data[i]={...data[i],...rec};}
-  else{rec.icon=ICONS[Math.floor(Math.random()*ICONS.length)];data.push({id:nextId++,...rec});}
-  save();closeCard();render();showToast(editId?'Guardado':'Formación creada');
+  const rec={
+    nombre, eje:document.getElementById('f-eje').value,
+    itinerario:document.getElementById('f-itinerario').value,
+    formador:document.getElementById('f-formador').value,
+    estado:estadoFinal, ects:parseFloat(document.getElementById('f-ects').value)||0,
+    inicio:document.getElementById('f-inicio').value,
+    fin:document.getElementById('f-fin').value,
+    conv1:document.getElementById('f-conv1').value,
+    conv2:conv2en?document.getElementById('f-conv2').value:'',
+    tasks
+  };
+  const btn=document.getElementById('btnSave');
+  btn.disabled=true; btn.textContent='Guardando…';
+  setSyncStatus('syncing','Guardando…');
+  try{
+    if(editId){
+      rec.icon=data.find(x=>x.firestoreId===editId)?.icon||'📋';
+      await updateDoc(doc(db,'formaciones',editId),rec);
+      if(estadoFinal!==estadoManual)showToast('Estado → "'+estadoFinal+'" automáticamente');
+      else showToast('Guardado');
+    } else {
+      rec.icon=ICONS[Math.floor(Math.random()*ICONS.length)];
+      rec.createdAt=serverTimestamp();
+      await addDoc(col,rec);
+      showToast('Formación creada');
+    }
+    closeCard();
+  } catch(err){ setSyncStatus('err','Error'); showToast('Error: '+err.message); }
+  btn.disabled=false; btn.textContent='Guardar';
 }
-function deleteCard(){
-  if(!editId){showToast('No hay formación seleccionada');return;}
+
+async function deleteCard(){
+  if(!editId)return;
   if(!confirm('¿Eliminar esta formación?'))return;
-  const idToDelete=editId;
-  document.getElementById('cardOverlay').classList.remove('open');
-  editId=null;
-  data=data.filter(x=>x.id!==idToDelete);
-  save();render();showToast('Eliminada');
+  setSyncStatus('syncing','Eliminando…');
+  try{ await deleteDoc(doc(db,'formaciones',editId)); closeCard(); showToast('Eliminada'); }
+  catch(err){ setSyncStatus('err','Error'); showToast('Error: '+err.message); }
 }
-function closeCard(){document.getElementById('cardOverlay').classList.remove('open');editId=null;}
+
+function closeCard(){ document.getElementById('cardOverlay').classList.remove('open'); editId=null; }
 document.getElementById('cardOverlay').addEventListener('click',function(e){if(e.target===this)closeCard();});
 document.getElementById('btnDel').addEventListener('click',deleteCard);
 
-/* EXPORT / IMPORT */
-function exportJSON(){const blob=new Blob([JSON.stringify({data,nextId},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='formaciones_pdi_'+new Date().toISOString().slice(0,10)+'.json';a.click();showToast('JSON exportado');}
-function importJSON(e){const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=ev=>{try{const p=JSON.parse(ev.target.result);if(p.data&&Array.isArray(p.data)){data=p.data;nextId=p.nextId||data.length+1;save();render();showToast('Datos importados');}else alert('Formato incorrecto.');}catch{alert('Error al leer el JSON.');}};r.readAsText(file);e.target.value='';}
-
-/* NOTION */
-function openNotionModal(){document.getElementById('notion-token').value=localStorage.getItem('notion_token')||'';document.getElementById('notion-db').value=localStorage.getItem('notion_db')||'';document.getElementById('notion-st').textContent='';document.getElementById('notionOverlay').classList.add('open');}
-function closeNotionModal(){document.getElementById('notionOverlay').classList.remove('open');}
-document.getElementById('notionOverlay').addEventListener('click',function(e){if(e.target===this)closeNotionModal();});
-function clearNotion(){localStorage.removeItem('notion_token');localStorage.removeItem('notion_db');document.getElementById('notion-token').value='';document.getElementById('notion-db').value='';document.getElementById('notion-st').textContent='Credenciales borradas.';}
-async function testNotion(){
-  const token=document.getElementById('notion-token').value.trim(),db=document.getElementById('notion-db').value.trim(),st=document.getElementById('notion-st');
-  if(!token||!db){st.textContent='Rellena token y database ID.';return;}
-  st.textContent='Probando…';st.style.color='var(--t3)';
-  try{
-    const res=await fetch(`https://api.notion.com/v1/databases/${db}`,{headers:{'Authorization':'Bearer '+token,'Notion-Version':'2022-06-28'}});
-    if(res.ok){localStorage.setItem('notion_token',token);localStorage.setItem('notion_db',db);st.style.color='var(--green)';st.textContent='✓ Conexión correcta. Credenciales guardadas.';}
-    else{st.style.color='var(--red)';st.textContent='✗ Error '+res.status+'. Comprueba el token y el ID.';}
-  }catch{st.style.color='var(--red)';st.textContent='✗ Error de red (CORS). La API de Notion requiere un proxy desde el navegador.';}
-}
-
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);}
-
-load();render();
+// ── EXPOSE TO GLOBAL (onclick en HTML necesita acceso fuera del module)
+window.openNew=openNew; window.closeCard=closeCard; window.saveCard=saveCard;
+window.setView=setView; window.setCardMode=setCardMode; window.toggleConv2=toggleConv2; window.render=render;
+window.showToast=msg=>{
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+};
 </script>
 </body>
 </html>
